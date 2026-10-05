@@ -162,6 +162,19 @@ To run from a checkout without installing: `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 
 from the repository root. No publishing step is required; the marketplace is
 just the repo's `.claude-plugin/marketplace.json`.
 
+### Loading vs. prerequisites
+
+Two things are distinct and failing either leaves the plugin unusable:
+
+1. **Loading.** The plugin ships its built `dist/` so the hook's imports resolve
+   when Claude Code clones and loads it. If `claude plugin list` shows
+   `failed to load`, that is a packaging problem, not a config problem.
+2. **Prerequisites** (separate from loading): `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`
+   must be set, and a TypeSafe API key must be available (`TYPESAFE_API_KEY` or the
+   `apiKey` option). Setting the env flag requires a **full restart** of Claude
+   Code — `/reload-plugins` alone re-reads plugins in the current process and will
+   not pick up a newly set environment variable.
+
 ## Development
 
 ```sh
