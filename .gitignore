@@ -1,4 +1,7 @@
 node_modules
-dist
 .env
 demo/JevDemo/build
+
+# dist/ is committed: Claude Code installs this plugin by cloning the repo and
+# does not build it, so the hook's compiled imports must ship in the repo.
+# Keep it in sync with `npm run build` (enforced by `npm run check:dist`).
