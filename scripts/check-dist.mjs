@@ -5,9 +5,11 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+// Invoke the local tsc through Node directly, rather than `npm run build`:
+// spawning npm.cmd without a shell throws EINVAL on Windows (Node 20+).
+const tsc = join(root, 'node_modules', 'typescript', 'bin', 'tsc');
 
-execFileSync(npm, ['run', 'build'], { cwd: root, stdio: 'inherit' });
+execFileSync(process.execPath, [tsc], { cwd: root, stdio: 'inherit' });
 
 const status = execFileSync('git', ['status', '--porcelain', '--', 'dist'], {
   cwd: root,
